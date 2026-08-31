@@ -4,6 +4,8 @@
     - noun - what is working correctly or incorrectly
     - verb - what exactly is happening
 
+## Names of functions and variables
+1. functions of creating something: 'create' | 'what'
 
 
 

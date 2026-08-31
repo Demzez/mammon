@@ -8,9 +8,14 @@ import (
 )
 
 type Config struct {
-	DataBase `yaml:"data_base"`
+	TCPServer `yaml:"tcp_server"`
+	DataBase  `yaml:"data_base"`
 }
 
+type TCPServer struct {
+	Host string `yaml:"host"`
+	Port int    `yaml:"port"`
+}
 type DataBase struct {
 	Path string `yaml:"path"`
 }
