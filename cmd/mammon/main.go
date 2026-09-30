@@ -7,6 +7,7 @@ import (
 	"mammon/internal/http-server/handler"
 	"mammon/internal/lib/logger/slog/slogpretty"
 	"mammon/internal/repository/sqlite"
+	"mammon/internal/service/task"
 	"net/http"
 	"sync"
 
@@ -16,7 +17,6 @@ import (
 
 func main() {
 	const op = "mammon.cmd.mammon.main"
-
 	wg := &sync.WaitGroup{}
 
 	//read config
@@ -55,7 +55,8 @@ func createRouter(log *slog.Logger) chi.Router {
 
 	r.Use(middleware.URLFormat)
 
-	r.Get("/", handler.NewTextSender(log))
+	taskService := task.NewService(log)
+	r.Get("/", handler.NewTaskGetter(log, taskService))
 
 	return r
 }
