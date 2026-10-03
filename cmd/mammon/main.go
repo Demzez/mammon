@@ -24,13 +24,13 @@ func main() {
 	log.Info("config is read && logger is loaded")
 
 	// init database
-	repository := sqlite.NewSqliteRepository(cfg, logger)
+	repository := sqlite.NewRepository(cfg, logger)
 	defer repository.Close()
 	log.Info("database is loaded")
 
 	//init services
 	services := Services{
-		task: task.NewService(log),
+		task: task.NewService(log, repository),
 	}
 	log.Info("services is created")
 

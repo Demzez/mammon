@@ -9,7 +9,7 @@ type TaskGetter interface {
 	GetTask() string
 }
 
-func NewTaskGetter(log *slog.Logger, getter TaskGetter) http.HandlerFunc {
+func GetTask(log *slog.Logger, getter TaskGetter) http.HandlerFunc {
 	const op = "mammon.internal.http-server.handler.NewTaskGetter"
 	log = log.With(slog.String("op", op))
 

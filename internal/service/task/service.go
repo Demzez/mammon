@@ -2,13 +2,17 @@ package task
 
 import "log/slog"
 
-type Service struct {
-	log *slog.Logger
-	//TODO: repository interface
+type Repository interface {
 }
 
-func NewService(log *slog.Logger) *Service {
+type Service struct {
+	log *slog.Logger
+	rep Repository
+}
+
+func NewService(log *slog.Logger, rep Repository) *Service {
 	return &Service{
 		log: log,
+		rep: rep,
 	}
 }

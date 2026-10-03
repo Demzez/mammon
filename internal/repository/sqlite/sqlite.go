@@ -10,7 +10,11 @@ import (
 
 const op = "mammon.internal.repository.sqlite"
 
-func NewSqliteRepository(cfg *config.Config, log *slog.Logger) *sql.DB {
+type Repository struct {
+	db *sql.DB
+}
+
+func NewRepository(cfg *config.Config, log *slog.Logger) *Repository {
 	log = log.With(
 		slog.String("op", op+"NewSqliteRepository"),
 	)
@@ -31,7 +35,9 @@ func NewSqliteRepository(cfg *config.Config, log *slog.Logger) *sql.DB {
 		db.Close()
 	}
 
-	return db
+	return &Repository{db: db}
 }
 
-//func
+func (r *Repository) Close() {
+	r.db.Close()
+}
