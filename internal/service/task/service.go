@@ -1,8 +1,14 @@
 package task
 
-import "log/slog"
+import (
+	"log/slog"
+	"mammon/internal/object"
+)
+
+const op = "mammon.internal.service.task"
 
 type Repository interface {
+	ReadTasks() ([]object.Task, error)
 }
 
 type Service struct {

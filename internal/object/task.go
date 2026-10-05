@@ -9,7 +9,7 @@ const (
 )
 
 type Task struct {
-	name        string
-	description string
-	status      Status
+	Name        string
+	Description string
+	Status      Status
 }

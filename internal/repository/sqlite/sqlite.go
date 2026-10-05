@@ -2,42 +2,34 @@ package sqlite
 
 import (
 	"database/sql"
-	"log/slog"
+	"fmt"
 	"mammon/internal/config"
 
 	_ "github.com/mattn/go-sqlite3"
 )
 
-const op = "mammon.internal.repository.sqlite"
+const op = "mammon.internal.reposiory.sqlite"
 
 type Repository struct {
 	db *sql.DB
 }
 
-func NewRepository(cfg *config.Config, log *slog.Logger) *Repository {
-	log = log.With(
-		slog.String("op", op+"NewSqliteRepository"),
-	)
+func NewRepository(cfg *config.Config) (*Repository, error) {
+	const op = op + ".NewRepository"
 
 	db, err := sql.Open("sqlite3", cfg.DataBase.Path)
 	if err != nil {
-		log.Error("failed to open database", slog.String("error", err.Error()))
+		return nil, fmt.Errorf("%s | database open failed: %w", op, err)
 	}
 
-	_, err = db.Exec(`CREATE TABLE IF NOT EXISTS task (
-    	task_id INTEGER PRIMARY KEY,
-    	name TEXT NOT NULL,
-    	descritption TEXT,
-        status TEXT NOT NULL)
-        `)
-	if err != nil {
-		log.Error("failed to create table", "error:", err)
+	repository := &Repository{
+		db: db,
+	}
+
+	if err := repository.InitSchema(); err != nil {
 		db.Close()
+		return nil, err
 	}
 
-	return &Repository{db: db}
-}
-
-func (r *Repository) Close() {
-	r.db.Close()
+	return repository, nil
 }

@@ -17,7 +17,7 @@ func createRouter(log *slog.Logger, services Services) chi.Router {
 	r := chi.NewRouter()
 	r.Use(middleware.URLFormat)
 
-	r.Get("/", handler.GetTask(log, services.task))
+	r.Get("/tasks", handler.GetTasks(log, services.task))
 
 	return r
 }
