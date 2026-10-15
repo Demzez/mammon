@@ -35,7 +35,7 @@ func main() {
 
 	//init services
 	services := Services{
-		task: task.NewService(logger, repository),
+		task: task.NewService(repository),
 	}
 	log.Info("services is created")
 

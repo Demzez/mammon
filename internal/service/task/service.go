@@ -1,24 +1,22 @@
 package task
 
 import (
-	"log/slog"
 	"mammon/internal/object"
 )
 
 const op = "mammon.internal.service.task"
 
 type Repository interface {
+	CreateTask(task object.Task) (int64, error)
 	ReadTasks() ([]object.Task, error)
 }
 
 type Service struct {
-	log *slog.Logger
 	rep Repository
 }
 
-func NewService(log *slog.Logger, rep Repository) *Service {
+func NewService(rep Repository) *Service {
 	return &Service{
-		log: log,
 		rep: rep,
 	}
 }

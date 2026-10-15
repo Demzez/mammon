@@ -1,4 +1,4 @@
-package handler
+package task_handler
 
 import (
 	"encoding/json"
@@ -11,9 +11,9 @@ type TaskGetter interface {
 	GetTasks() ([]object.Task, error)
 }
 
-func GetTasks(log *slog.Logger, getter TaskGetter) http.HandlerFunc {
-	const op = "mammon.internal.http-server.handler.GetTasks"
-	log = log.With(slog.String("op", op))
+func GetTasks(l *slog.Logger, getter TaskGetter) http.HandlerFunc {
+	const op = op + ".GetTasks()"
+	log := l.With(slog.String("op", op))
 
 	return func(w http.ResponseWriter, r *http.Request) {
 		tasks, err := getter.GetTasks()

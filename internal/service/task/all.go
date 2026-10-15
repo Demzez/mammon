@@ -1,18 +1,27 @@
 package task
 
 import (
-	"log/slog"
+	"fmt"
 	"mammon/internal/object"
 )
 
+func (s *Service) AddTask(task object.Task) (int64, error) {
+	const op = op + ".AddTask()"
+
+	taskId, err := s.rep.CreateTask(task)
+	if err != nil {
+		return 0, fmt.Errorf("%s: %w", op, err)
+	}
+
+	return taskId, nil
+}
+
 func (s *Service) GetTasks() ([]object.Task, error) {
-	const op = op + ".GetTasks"
-	log := s.log.With("op", op)
+	const op = op + ".GetTasks()"
 
 	tasks, err := s.rep.ReadTasks()
 	if err != nil {
-		log.Error("task getting failed", slog.String("error", err.Error()))
-		return tasks, err
+		return tasks, fmt.Errorf("%s : %w", op, err)
 	}
 
 	return tasks, nil
