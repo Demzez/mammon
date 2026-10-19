@@ -9,13 +9,14 @@ func (r *Repository) CreateTask(task object.Task) (int64, error) {
 	const op = op + ".CreateTask()"
 
 	const query = `
-	INSERT INTO task(name, description, status) VALUES ($1, $2, $3);
+		INSERT INTO task(name, description, status) VALUES ($1, $2, $3);
 	`
 
 	result, err := r.db.Exec(query, task.Name, task.Description, task.Status)
 	if err != nil {
 		return 0, fmt.Errorf("%s | creating task failed: %w", op, err)
 	}
+
 	taskId, err := result.LastInsertId()
 	if err != nil {
 		return 0, fmt.Errorf("%s | getting task_id failed: %w", op, err)

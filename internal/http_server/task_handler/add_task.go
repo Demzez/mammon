@@ -19,16 +19,30 @@ func AddTask(l *slog.Logger, adder TaskAdder) http.HandlerFunc {
 		task := object.Task{}
 		err := json.NewDecoder(r.Body).Decode(&task)
 		if err != nil {
-			log.Error("failed to unmarshal json", slog.String("error", err.Error()))
+			http.Error(w, HttpError, http.StatusInternalServerError)
 
+			log.Error("failed to unmarshal json", slog.String("error", err.Error()))
+			return
 		}
 
 		taskId, err := adder.AddTask(task)
 		if err != nil {
+			http.Error(w, HttpError, http.StatusInternalServerError)
+
 			log.Error("failed to add task", slog.String("error", err.Error()))
+			return
 		}
 
-		writeJSON(w, http.StatusCreated, map[string]int64{"task_id": taskId})
+		data, err := json.Marshal(map[string]int64{"task_id": taskId})
+		if err != nil {
+			http.Error(w, HttpError, http.StatusInternalServerError)
+
+			log.Error("failed to marshal json", slog.String("error", err.Error()))
+			return
+		}
+
+		writeJSON(w, http.StatusCreated, data)
 		log.Info("successfully created task %d", taskId)
+		return
 	}
 }

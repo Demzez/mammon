@@ -2,7 +2,7 @@ package main
 
 import (
 	"log/slog"
-	"mammon/internal/http-server/task_handler"
+	"mammon/internal/http_server/task_handler"
 	"mammon/internal/service/task"
 
 	"github.com/go-chi/chi/v5"
@@ -18,6 +18,7 @@ func createRouter(log *slog.Logger, services Services) chi.Router {
 	r.Use(middleware.URLFormat)
 
 	r.Get("/tasks", task_handler.GetTasks(log, services.task))
+	r.Post("/newtask", task_handler.AddTask(log, services.task))
 
 	return r
 }
