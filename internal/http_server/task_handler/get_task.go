@@ -18,18 +18,25 @@ func GetTasks(l *slog.Logger, getter TaskGetter) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		tasks, err := getter.GetTasks()
 		if err != nil {
-			w.WriteHeader(http.StatusInternalServerError)
+
+			log.Error("failed to getting tasks from service", slog.String("error", err.Error()))
+
+			http.Error(w, "something went wrong", http.StatusNoContent)
 			return
 		}
 
 		data, err := json.Marshal(tasks)
 		if err != nil {
-			w.WriteHeader(http.StatusInternalServerError)
+
+			log.Error("failed to marshal json", slog.String("error", err.Error()))
+
+			http.Error(w, "something went wrong", http.StatusInternalServerError)
 			return
 		}
 
-		w.Write(data)
-		log.Info("tasks get successfully")
+		writeJSON(w, http.StatusOK, data)
+
+		log.Info("successfully get all tasks")
 		return
 	}
 }
